@@ -1,5 +1,7 @@
 #include "tests.h"
 #include "emittertests.h"
+#include "nodetests.h"
+#include "parsertests.h"
 #include "spectests.h"
 #include "yaml-cpp/yaml.h"
 #include <fstream>
@@ -12,6 +14,9 @@ namespace Test
 	void RunAll()
 	{
 		bool passed = true;
+		if(!RunParserTests())
+			passed = false;
+			
 		if(!RunEmitterTests())
 			passed = false;
 

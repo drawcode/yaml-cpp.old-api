@@ -11,6 +11,10 @@ namespace YAML
 	{
 	}
 	
+	Emitter::Emitter(std::ostream& stream): m_pState(new EmitterState), m_stream(stream)
+	{
+	}
+
 	Emitter::~Emitter()
 	{
 	}
@@ -20,7 +24,7 @@ namespace YAML
 		return m_stream.str();
 	}
 	
-	unsigned Emitter::size() const
+    std::size_t Emitter::size() const
 	{
 		return m_stream.pos();
 	}

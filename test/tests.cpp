@@ -1,6 +1,5 @@
 #include "tests.h"
 #include "emittertests.h"
-#include "nodetests.h"
 #include "parsertests.h"
 #include "spectests.h"
 #include "yaml-cpp/yaml.h"
@@ -22,7 +21,7 @@ namespace Test
 
 		if(!RunSpecTests())
 			passed = false;
-		
+
 		if(passed)
 			std::cout << "All tests passed!\n";
 	}

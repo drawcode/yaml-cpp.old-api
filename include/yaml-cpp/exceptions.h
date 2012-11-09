@@ -147,13 +147,13 @@ namespace YAML
 	class BadDereference: public RepresentationException {
 	public:
 		BadDereference()
-		: RepresentationException(Mark::null(), ErrorMsg::BAD_DEREFERENCE) {}
+		: RepresentationException(Mark::null_mark(), ErrorMsg::BAD_DEREFERENCE) {}
 	};
 	
 	class EmitterException: public Exception {
 	public:
 		EmitterException(const std::string& msg_)
-		: Exception(Mark::null(), msg_) {}
+		: Exception(Mark::null_mark(), msg_) {}
 	};
 }
 

@@ -1,7 +1,9 @@
 #include "yaml-cpp/parser.h"
 #include "yaml-cpp/eventhandler.h"
 #include "yaml-cpp/exceptions.h"
+#include "yaml-cpp/node.h"
 #include "directives.h"
+#include "nodebuilder.h"
 #include "scanner.h"
 #include "singledocparser.h"
 #include "tag.h"
@@ -51,6 +53,15 @@ namespace YAML
 		SingleDocParser sdp(*m_pScanner, *m_pDirectives);
 		sdp.HandleDocument(eventHandler);
 		return true;
+	}
+
+	// GetNextDocument
+	// . Reads the next document in the queue (of tokens).
+	// . Throws a ParserException on error.
+	bool Parser::GetNextDocument(Node& document)
+	{
+		NodeBuilder builder(document);
+		return HandleNextDocument(builder);
 	}
 
 	// ParseDirectives

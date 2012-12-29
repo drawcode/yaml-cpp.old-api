@@ -935,6 +935,102 @@ namespace Test
                 return false;
             return true;
         }
+
+        bool DereferenceScalar()
+		{
+			std::string input = "key";
+			std::stringstream stream(input);
+			YAML::Parser parser(stream);
+			YAML::Node doc;
+			parser.GetNextDocument(doc);
+			
+			try {
+                *doc.begin();
+			} catch(const YAML::DereferenceScalarError& e) {
+			}
+            
+			return true;
+		}
+
+        bool DereferenceKeyScalar()
+		{
+			std::string input = "key";
+			std::stringstream stream(input);
+			YAML::Parser parser(stream);
+			YAML::Node doc;
+			parser.GetNextDocument(doc);
+			
+			try {
+                doc.begin().first();
+			} catch(const YAML::DereferenceKeyScalarError& e) {
+			}
+
+			return true;
+		}
+
+        bool DereferenceValueScalar()
+		{
+			std::string input = "key";
+			std::stringstream stream(input);
+			YAML::Parser parser(stream);
+			YAML::Node doc;
+			parser.GetNextDocument(doc);
+			
+			try {
+                doc.begin().second();
+			} catch(const YAML::DereferenceValueScalarError& e) {
+			}
+            
+			return true;
+		}
+
+        bool DereferenceKeySeq()
+		{
+			std::string input = "[key]";
+			std::stringstream stream(input);
+			YAML::Parser parser(stream);
+			YAML::Node doc;
+			parser.GetNextDocument(doc);
+			
+			try {
+                doc.begin().first();
+			} catch(const YAML::DereferenceKeySeqError& e) {
+			}
+            
+			return true;
+		}
+        
+        bool DereferenceValueSeq()
+		{
+			std::string input = "[key]";
+			std::stringstream stream(input);
+			YAML::Parser parser(stream);
+			YAML::Node doc;
+			parser.GetNextDocument(doc);
+			
+			try {
+                doc.begin().second();
+			} catch(const YAML::DereferenceValueSeqError& e) {
+			}
+            
+			return true;
+		}
+
+        bool DereferenceMap()
+		{
+			std::string input = "{key: value}";
+			std::stringstream stream(input);
+			YAML::Parser parser(stream);
+			YAML::Node doc;
+			parser.GetNextDocument(doc);
+			
+			try {
+                *doc.begin();
+			} catch(const YAML::DereferenceMapError& e) {
+			}
+            
+			return true;
+		}
     }
 	
 	namespace {
@@ -1218,6 +1314,12 @@ namespace Test
 		RunParserTest(&Parser::QuotedNewline, "quoted newline", passed, total);
 		RunParserTest(&Parser::DoubleAsInt, "double as int", passed, total);
 		RunParserTest(&Parser::Binary, "binary", passed, total);
+        RunParserTest(&Parser::DereferenceScalar, "dereference scalar", passed, total);
+        RunParserTest(&Parser::DereferenceKeyScalar, "dereference key scalar", passed, total);
+        RunParserTest(&Parser::DereferenceValueScalar, "dereference value scalar", passed, total);
+        RunParserTest(&Parser::DereferenceKeySeq, "dereference key seq", passed, total);
+        RunParserTest(&Parser::DereferenceValueSeq, "dereference value seq", passed, total);
+        RunParserTest(&Parser::DereferenceMap, "dereference map", passed, total);
 		
 		RunEncodingTest(&EncodeToUtf8, false, "UTF-8, no BOM", passed, total);
 		RunEncodingTest(&EncodeToUtf8, true, "UTF-8 with BOM", passed, total);

@@ -30,14 +30,14 @@ namespace YAML
 		switch(m_type) {
 			case NodeType::Null:
 			case NodeType::Scalar:
-				throw BadDereference();
+				throw DereferenceScalarError();
 			case NodeType::Sequence:
 				return FindFromNodeAtIndex(*this, key);
 			case NodeType::Map:
 				return FindValueForKey(key);
 		}
 		assert(false);
-		throw BadDereference();
+		throw DereferenceScalarError();
 	}
 	
 	template <typename T>

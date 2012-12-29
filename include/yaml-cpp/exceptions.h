@@ -57,7 +57,12 @@ namespace YAML
 
 		const char * const INVALID_SCALAR         = "invalid scalar";
 		const char * const KEY_NOT_FOUND          = "key not found";
-		const char * const BAD_DEREFERENCE        = "bad dereference";
+		const char * const DEREFERENCE_SCALAR     = "trying to dereference an iterator to a scalar";
+		const char * const DEREFERENCE_KEY_SCALAR = "trying to call first() on an iterator to a scalar";
+		const char * const DEREFERENCE_VALUE_SCALAR = "trying to call second() on an iterator to a scalar";
+		const char * const DEREFERENCE_KEY_SEQ    = "trying to call first() on an iterator to a sequence";
+		const char * const DEREFERENCE_VALUE_SEQ  = "trying to call second() on an iterator to a sequence";
+		const char * const DEREFERENCE_MAP        = "trying to dereference an iterator to a map (must call first() or second())";
 		
 		const char * const UNMATCHED_GROUP_TAG    = "unmatched group tag";
 		const char * const UNEXPECTED_END_SEQ     = "unexpected end sequence token";
@@ -144,12 +149,42 @@ namespace YAML
 		return TypedKeyNotFound <T> (mark, key);
 	}
 
-	class BadDereference: public RepresentationException {
+	class DereferenceScalarError: public RepresentationException {
 	public:
-		BadDereference()
-		: RepresentationException(Mark::null_mark(), ErrorMsg::BAD_DEREFERENCE) {}
+		DereferenceScalarError()
+		: RepresentationException(Mark::null_mark(), ErrorMsg::DEREFERENCE_SCALAR) {}
 	};
 	
+	class DereferenceKeyScalarError: public RepresentationException {
+	public:
+		DereferenceKeyScalarError()
+		: RepresentationException(Mark::null_mark(), ErrorMsg::DEREFERENCE_KEY_SCALAR) {}
+	};
+	
+	class DereferenceValueScalarError: public RepresentationException {
+	public:
+		DereferenceValueScalarError()
+		: RepresentationException(Mark::null_mark(), ErrorMsg::DEREFERENCE_VALUE_SCALAR) {}
+	};
+	
+	class DereferenceKeySeqError: public RepresentationException {
+	public:
+		DereferenceKeySeqError()
+		: RepresentationException(Mark::null_mark(), ErrorMsg::DEREFERENCE_KEY_SEQ) {}
+	};
+    
+    class DereferenceValueSeqError: public RepresentationException {
+	public:
+		DereferenceValueSeqError()
+		: RepresentationException(Mark::null_mark(), ErrorMsg::DEREFERENCE_VALUE_SEQ) {}
+	};
+    
+    class DereferenceMapError: public RepresentationException {
+	public:
+		DereferenceMapError()
+		: RepresentationException(Mark::null_mark(), ErrorMsg::DEREFERENCE_MAP) {}
+	};
+
 	class EmitterException: public Exception {
 	public:
 		EmitterException(const std::string& msg_)

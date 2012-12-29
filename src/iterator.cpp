@@ -53,34 +53,50 @@ namespace YAML
 
 	const Node& Iterator::operator * () const
 	{
-		if(m_pData->type == IterPriv::IT_SEQ)
-			return **m_pData->seqIter;
-
-		throw BadDereference();
+        switch(m_pData->type) {
+            case IterPriv::IT_NONE:
+                throw DereferenceScalarError();
+            case IterPriv::IT_SEQ:
+                return **m_pData->seqIter;
+            case IterPriv::IT_MAP:
+                throw DereferenceMapError();
+        }
 	}
 
 	const Node *Iterator::operator -> () const
 	{
-		if(m_pData->type == IterPriv::IT_SEQ)
-			return *m_pData->seqIter;
-
-		throw BadDereference();
+        switch(m_pData->type) {
+            case IterPriv::IT_NONE:
+                throw DereferenceScalarError();
+            case IterPriv::IT_SEQ:
+                return *m_pData->seqIter;
+            case IterPriv::IT_MAP:
+                throw DereferenceMapError();
+        }
 	}
 
 	const Node& Iterator::first() const
 	{
-		if(m_pData->type == IterPriv::IT_MAP)
-			return *m_pData->mapIter->first;
-
-		throw BadDereference();
+        switch(m_pData->type) {
+            case IterPriv::IT_NONE:
+                throw DereferenceKeyScalarError();
+            case IterPriv::IT_SEQ:
+                throw DereferenceKeySeqError();
+            case IterPriv::IT_MAP:
+                return *m_pData->mapIter->first;
+        }
 	}
 
 	const Node& Iterator::second() const
 	{
-		if(m_pData->type == IterPriv::IT_MAP)
-			return *m_pData->mapIter->second;
-
-		throw BadDereference();
+        switch(m_pData->type) {
+            case IterPriv::IT_NONE:
+                throw DereferenceValueScalarError();
+            case IterPriv::IT_SEQ:
+                throw DereferenceValueSeqError();
+            case IterPriv::IT_MAP:
+                return *m_pData->mapIter->second;
+        }
 	}
 
 	bool operator == (const Iterator& it, const Iterator& jt)

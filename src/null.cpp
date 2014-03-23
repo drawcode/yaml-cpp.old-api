@@ -1,5 +1,6 @@
-#include "yaml-cpp/null.h"
 #include "yaml-cpp/node.h"
+#include "yaml-cpp/nodereadimpl.h"
+#include "yaml-cpp/null.h"
 
 namespace YAML {
 _Null Null;

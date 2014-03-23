@@ -7,11 +7,17 @@
 #pragma once
 #endif
 
+#include <limits>
+#include <sstream>
+#include <string>
+
+#include "yaml-cpp/dll.h"
 #include "yaml-cpp/null.h"
 #include "yaml-cpp/traits.h"
-#include <limits>
-#include <string>
-#include <sstream>
+
+namespace YAML {
+struct _Null;
+}  // namespace YAML
 
 namespace YAML {
 // traits for conversion

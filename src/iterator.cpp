@@ -1,8 +1,11 @@
-#include "yaml-cpp/node.h"
-#include "yaml-cpp/exceptions.h"
+#include "yaml-cpp/iterator.h"
+
 #include "iterpriv.h"
+#include "yaml-cpp/exceptions.h"  // IWYU pragma: keep
 
 namespace YAML {
+class Node;
+
 Iterator::Iterator() : m_pData(new IterPriv) {}
 
 Iterator::Iterator(std::auto_ptr<IterPriv> pData) : m_pData(pData) {}

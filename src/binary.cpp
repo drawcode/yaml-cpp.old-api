@@ -1,4 +1,5 @@
 #include "yaml-cpp/binary.h"
+
 #include "yaml-cpp/node.h"
 
 namespace YAML {

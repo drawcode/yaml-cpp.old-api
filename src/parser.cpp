@@ -5,16 +5,13 @@
 #include "nodebuilder.h"
 #include "scanner.h"  // IWYU pragma: keep
 #include "singledocparser.h"
-#include "tag.h"
 #include "token.h"
-#include "yaml-cpp/exceptions.h"  // IWYU pragma: keep
-#include "yaml-cpp/eventhandler.h"
 #include "yaml-cpp/exceptions.h"
-#include "yaml-cpp/node.h"
 #include "yaml-cpp/parser.h"
 
 namespace YAML {
 class EventHandler;
+class Node;
 
 Parser::Parser() {}
 

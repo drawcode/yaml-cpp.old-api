@@ -1,10 +1,11 @@
-#include "spectests.h"
-#include "specexamples.h"
-#include "yaml-cpp/yaml.h"
 #include <fstream>
+#include <iostream>
 #include <sstream>
 #include <vector>
-#include <iostream>
+
+#include "specexamples.h"  // IWYU pragma: keep
+#include "spectests.h"
+#include "yaml-cpp/yaml.h"   // IWYU pragma: keep
 
 #define YAML_ASSERT(cond)               \
   do {                                  \

@@ -1,8 +1,8 @@
-#include "tests.h"
-#include "yaml-cpp/yaml.h"
-#include <sstream>
 #include <algorithm>
 #include <iostream>
+#include <sstream>
+
+#include "yaml-cpp/yaml.h"  // IWYU pragma: keep
 
 namespace Test {
 namespace Parser {

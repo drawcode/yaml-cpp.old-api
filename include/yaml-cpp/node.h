@@ -7,26 +7,32 @@
 #pragma once
 #endif
 
-#include "yaml-cpp/dll.h"
-#include "yaml-cpp/exceptions.h"
-#include "yaml-cpp/mark.h"
-#include "yaml-cpp/noncopyable.h"
-#include "yaml-cpp/conversion.h"
-#include "yaml-cpp/iterator.h"
-#include "yaml-cpp/ltnode.h"
 #include <iostream>
 #include <map>
 #include <memory>
 #include <string>
 #include <vector>
 
+#include "yaml-cpp/conversion.h"
+#include "yaml-cpp/dll.h"
+#include "yaml-cpp/exceptions.h"
+#include "yaml-cpp/iterator.h"
+#include "yaml-cpp/ltnode.h"
+#include "yaml-cpp/mark.h"
+#include "yaml-cpp/noncopyable.h"
+#include "yaml-cpp/traits.h"
+
+namespace YAML {
+template <typename T> struct is_scalar_convertible;
+}  // namespace YAML
+
 namespace YAML {
 class AliasManager;
 class Content;
-class NodeOwnership;
-class Scanner;
 class Emitter;
 class EventHandler;
+class NodeOwnership;
+class Scanner;
 
 struct NodeType {
   enum value {

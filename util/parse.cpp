@@ -1,8 +1,14 @@
-#include "yaml-cpp/yaml.h"
-#include "yaml-cpp/eventhandler.h"
 #include <fstream>
 #include <iostream>
 #include <vector>
+
+#include "yaml-cpp/eventhandler.h"
+#include "yaml-cpp/yaml.h"  // IWYU pragma: keep
+
+namespace YAML {
+class Exception;
+struct Mark;
+}  // namespace YAML
 
 struct Params {
   bool hasFile;

@@ -1,8 +1,11 @@
 #include <sstream>
 
+#include "handler_test.h"
 #include "yaml-cpp/yaml.h"  // IWYU pragma: keep
 
 #include "gtest/gtest.h"
+
+using ::testing::_;
 
 namespace YAML {
 namespace {
@@ -65,7 +68,7 @@ void EncodeToUtf32BE(std::ostream& stream, int ch) {
          << Byte((ch >> 8) & 0xFF) << Byte(ch & 0xFF);
 }
 
-class EncodingTest : public ::testing::Test {
+class EncodingTest : public HandlerTest {
  protected:
   void SetUpEncoding(EncodingFn encoding, bool declareEncoding) {
     if (declareEncoding) {
@@ -89,21 +92,15 @@ class EncodingTest : public ::testing::Test {
   }
 
   void Run() {
-    Parser parser(m_yaml);
-    Node doc;
-    parser.GetNextDocument(doc);
-
-    Iterator itNode = doc.begin();
-    std::vector<std::string>::const_iterator itEntry = m_entries.begin();
-    for (; (itNode != doc.end()) && (itEntry != m_entries.end());
-         ++itNode, ++itEntry) {
-      std::string stScalarValue;
-      EXPECT_TRUE(itNode->GetScalar(stScalarValue));
-      EXPECT_EQ(*itEntry, stScalarValue);
+    EXPECT_CALL(handler, OnDocumentStart(_));
+    EXPECT_CALL(handler, OnSequenceStart(_, "?", 0));
+    for (std::size_t i = 0; i < m_entries.size(); i++) {
+      EXPECT_CALL(handler, OnScalar(_, "!", 0, m_entries[i]));
     }
+    EXPECT_CALL(handler, OnSequenceEnd());
+    EXPECT_CALL(handler, OnDocumentEnd());
 
-    ASSERT_EQ(doc.end(), itNode);
-    ASSERT_EQ(m_entries.end(), itEntry);
+    Parse(m_yaml.str());
   }
 
  private:

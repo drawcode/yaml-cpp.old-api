@@ -1,7 +1,7 @@
-#include "yaml-cpp/aliasmanager.h"
-#include "yaml-cpp/node.h"
 #include <cassert>
 #include <sstream>
+
+#include "yaml-cpp/aliasmanager.h"
 
 namespace YAML {
 AliasManager::AliasManager() : m_curAnchor(0) {}

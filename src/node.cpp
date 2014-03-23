@@ -1,16 +1,16 @@
 #include "yaml-cpp/node.h"
-#include "yaml-cpp/aliasmanager.h"
-#include "yaml-cpp/emitfromevents.h"
-#include "yaml-cpp/emitter.h"
-#include "yaml-cpp/eventhandler.h"
+
+#include <cassert>
+#include <stdexcept>
+
 #include "iterpriv.h"
 #include "nodebuilder.h"
 #include "nodeownership.h"
-#include "scanner.h"
-#include "tag.h"
-#include "token.h"
-#include <cassert>
-#include <stdexcept>
+#include "yaml-cpp/aliasmanager.h"
+#include "yaml-cpp/anchor.h"
+#include "yaml-cpp/emitfromevents.h"
+#include "yaml-cpp/eventhandler.h"
+#include "yaml-cpp/ltnode.h"
 
 namespace YAML {
 bool ltnode::operator()(const Node* pNode1, const Node* pNode2) const {

@@ -1,9 +1,11 @@
-#include "nodebuilder.h"
-#include "yaml-cpp/mark.h"
-#include "yaml-cpp/node.h"
 #include <cassert>
 
+#include "nodebuilder.h"
+#include "yaml-cpp/node.h"
+
 namespace YAML {
+struct Mark;
+
 NodeBuilder::NodeBuilder(Node& root)
     : m_root(root), m_initializedRoot(false), m_finished(false) {
   m_root.Clear();

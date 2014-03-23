@@ -1,5 +1,10 @@
-#include "yaml-cpp/conversion.h"
 #include <algorithm>
+
+#include "yaml-cpp/conversion.h"
+
+namespace YAML {
+struct _Null;
+}  // namespace YAML
 
 ////////////////////////////////////////////////////////////////
 // Specializations for converting a string to specific types

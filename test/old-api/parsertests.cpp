@@ -6,109 +6,6 @@
 
 namespace Test {
 namespace Parser {
-void SimpleScalar(std::string& inputScalar, std::string& desiredOutput) {
-  inputScalar = "Hello, World!";
-  desiredOutput = "Hello, World!";
-}
-
-void MultiLineScalar(std::string& inputScalar, std::string& desiredOutput) {
-  inputScalar =
-      "normal scalar, but\n"
-      "over several lines";
-  desiredOutput = "normal scalar, but over several lines";
-}
-
-void LiteralScalar(std::string& inputScalar, std::string& desiredOutput) {
-  inputScalar =
-      "|\n"
-      " literal scalar - so we can draw ASCII:\n"
-      " \n"
-      "          -   -\n"
-      "         |  -  |\n"
-      "          -----\n";
-  desiredOutput =
-      "literal scalar - so we can draw ASCII:\n"
-      "\n"
-      "         -   -\n"
-      "        |  -  |\n"
-      "         -----\n";
-}
-
-void FoldedScalar(std::string& inputScalar, std::string& desiredOutput) {
-  inputScalar =
-      ">\n"
-      " and a folded scalar... so we\n"
-      " can just keep writing various\n"
-      " things. And if we want to keep indentation:\n"
-      " \n"
-      "    we just indent a little\n"
-      "    see, this stays indented";
-  desiredOutput =
-      "and a folded scalar... so we"
-      " can just keep writing various"
-      " things. And if we want to keep indentation:\n"
-      "\n"
-      "   we just indent a little\n"
-      "   see, this stays indented";
-}
-
-void ChompedFoldedScalar(std::string& inputScalar, std::string& desiredOutput) {
-  inputScalar =
-      ">-\n"
-      "  Here's a folded scalar\n"
-      "  that gets chomped.";
-  desiredOutput =
-      "Here's a folded scalar"
-      " that gets chomped.";
-}
-
-void ChompedLiteralScalar(std::string& inputScalar,
-                          std::string& desiredOutput) {
-  inputScalar =
-      "|-\n"
-      "  Here's a literal scalar\n"
-      "  that gets chomped.";
-  desiredOutput =
-      "Here's a literal scalar\n"
-      "that gets chomped.";
-}
-
-void FoldedScalarWithIndent(std::string& inputScalar,
-                            std::string& desiredOutput) {
-  inputScalar =
-      ">2\n"
-      "       Here's a folded scalar\n"
-      "  that starts with some indentation.";
-  desiredOutput =
-      "     Here's a folded scalar\n"
-      "that starts with some indentation.";
-}
-
-void ColonScalar(std::string& inputScalar, std::string& desiredOutput) {
-  inputScalar = "::vector";
-  desiredOutput = "::vector";
-}
-
-void QuotedScalar(std::string& inputScalar, std::string& desiredOutput) {
-  inputScalar = "\": - ()\"";
-  desiredOutput = ": - ()";
-}
-
-void CommaScalar(std::string& inputScalar, std::string& desiredOutput) {
-  inputScalar = "Up, up, and away!";
-  desiredOutput = "Up, up, and away!";
-}
-
-void DashScalar(std::string& inputScalar, std::string& desiredOutput) {
-  inputScalar = "-123";
-  desiredOutput = "-123";
-}
-
-void URLScalar(std::string& inputScalar, std::string& desiredOutput) {
-  inputScalar = "http://example.com/foo#bar";
-  desiredOutput = "http://example.com/foo#bar";
-}
-
 bool SimpleSeq() {
   std::string input =
       "- eggs\n"
@@ -1006,38 +903,6 @@ bool DereferenceMap() {
 }
 
 namespace {
-void RunScalarParserTest(void (*test)(std::string&, std::string&),
-                         const std::string& name, int& passed, int& total) {
-  std::string error;
-  std::string inputScalar, desiredOutput;
-  std::string output;
-  bool ok = true;
-  try {
-    test(inputScalar, desiredOutput);
-    std::stringstream stream(inputScalar);
-    YAML::Parser parser(stream);
-    YAML::Node doc;
-    parser.GetNextDocument(doc);
-    doc >> output;
-  }
-  catch (const YAML::Exception& e) {
-    ok = false;
-    error = e.what();
-  }
-  if (ok && output == desiredOutput) {
-    passed++;
-  } else {
-    std::cout << "Parser test failed: " << name << "\n";
-    if (error != "")
-      std::cout << "Caught exception: " << error << "\n";
-    else {
-      std::cout << "Output:\n" << output << "<<<\n";
-      std::cout << "Desired output:\n" << desiredOutput << "<<<\n";
-    }
-  }
-  total++;
-}
-
 void RunParserTest(bool (*test)(), const std::string& name, int& passed,
                    int& total) {
   std::string error;
@@ -1213,23 +1078,6 @@ void RunEncodingTest(EncodingFn encoding, bool declareEncoding,
 bool RunParserTests() {
   int passed = 0;
   int total = 0;
-  RunScalarParserTest(&Parser::SimpleScalar, "simple scalar", passed, total);
-  RunScalarParserTest(&Parser::MultiLineScalar, "multi-line scalar", passed,
-                      total);
-  RunScalarParserTest(&Parser::LiteralScalar, "literal scalar", passed, total);
-  RunScalarParserTest(&Parser::FoldedScalar, "folded scalar", passed, total);
-  RunScalarParserTest(&Parser::ChompedFoldedScalar, "chomped folded scalar",
-                      passed, total);
-  RunScalarParserTest(&Parser::ChompedLiteralScalar, "chomped literal scalar",
-                      passed, total);
-  RunScalarParserTest(&Parser::FoldedScalarWithIndent,
-                      "folded scalar with indent", passed, total);
-  RunScalarParserTest(&Parser::ColonScalar, "colon scalar", passed, total);
-  RunScalarParserTest(&Parser::QuotedScalar, "quoted scalar", passed, total);
-  RunScalarParserTest(&Parser::CommaScalar, "comma scalar", passed, total);
-  RunScalarParserTest(&Parser::DashScalar, "dash scalar", passed, total);
-  RunScalarParserTest(&Parser::URLScalar, "url scalar", passed, total);
-
   RunParserTest(&Parser::SimpleSeq, "simple seq", passed, total);
   RunParserTest(&Parser::SimpleMap, "simple map", passed, total);
   RunParserTest(&Parser::FlowSeq, "flow seq", passed, total);

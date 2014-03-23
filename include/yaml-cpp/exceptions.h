@@ -66,6 +66,22 @@ const char* const AMBIGUOUS_ANCHOR =
     "cannot assign the same alias to multiple nodes";
 const char* const UNKNOWN_ANCHOR = "the referenced anchor is not defined";
 
+const char* const INVALID_SCALAR = "invalid scalar";
+const char* const KEY_NOT_FOUND = "key not found";
+const char* const DEREFERENCE_SCALAR =
+    "trying to dereference an iterator to a scalar";
+const char* const DEREFERENCE_KEY_SCALAR =
+    "trying to call first() on an iterator to a scalar";
+const char* const DEREFERENCE_VALUE_SCALAR =
+    "trying to call second() on an iterator to a scalar";
+const char* const DEREFERENCE_KEY_SEQ =
+    "trying to call first() on an iterator to a sequence";
+const char* const DEREFERENCE_VALUE_SEQ =
+    "trying to call second() on an iterator to a sequence";
+const char* const DEREFERENCE_MAP =
+    "trying to dereference an iterator to a map (must call first() or "
+    "second())";
+
 const char* const UNMATCHED_GROUP_TAG = "unmatched group tag";
 const char* const UNEXPECTED_END_SEQ = "unexpected end sequence token";
 const char* const UNEXPECTED_END_MAP = "unexpected end map token";
@@ -74,6 +90,26 @@ const char* const SINGLE_QUOTED_CHAR =
 const char* const INVALID_ANCHOR = "invalid anchor";
 const char* const INVALID_ALIAS = "invalid alias";
 const char* const INVALID_TAG = "invalid tag";
+
+template <typename T>
+inline const std::string KEY_NOT_FOUND_WITH_KEY(
+    const T&, typename disable_if<is_numeric<T> >::type* = 0) {
+  return KEY_NOT_FOUND;
+}
+
+inline const std::string KEY_NOT_FOUND_WITH_KEY(const std::string& key) {
+  std::stringstream stream;
+  stream << KEY_NOT_FOUND << ": " << key;
+  return stream.str();
+}
+
+template <typename T>
+inline const std::string KEY_NOT_FOUND_WITH_KEY(
+    const T& key, typename enable_if<is_numeric<T> >::type* = 0) {
+  std::stringstream stream;
+  stream << KEY_NOT_FOUND << ": " << key;
+  return stream.str();
+}
 }
 
 class Exception : public std::runtime_error {
@@ -99,6 +135,84 @@ class ParserException : public Exception {
  public:
   ParserException(const Mark& mark_, const std::string& msg_)
       : Exception(mark_, msg_) {}
+};
+
+class RepresentationException : public Exception {
+ public:
+  RepresentationException(const Mark& mark_, const std::string& msg_)
+      : Exception(mark_, msg_) {}
+};
+
+// representation exceptions
+class InvalidScalar : public RepresentationException {
+ public:
+  InvalidScalar(const Mark& mark_)
+      : RepresentationException(mark_, ErrorMsg::INVALID_SCALAR) {}
+};
+
+class KeyNotFound : public RepresentationException {
+ public:
+  template <typename T>
+  KeyNotFound(const Mark& mark_, const T& key_)
+      : RepresentationException(mark_, ErrorMsg::KEY_NOT_FOUND_WITH_KEY(key_)) {
+  }
+};
+
+template <typename T>
+class TypedKeyNotFound : public KeyNotFound {
+ public:
+  TypedKeyNotFound(const Mark& mark_, const T& key_)
+      : KeyNotFound(mark_, key_), key(key_) {}
+  virtual ~TypedKeyNotFound() throw() {}
+
+  T key;
+};
+
+template <typename T>
+inline TypedKeyNotFound<T> MakeTypedKeyNotFound(const Mark& mark,
+                                                const T& key) {
+  return TypedKeyNotFound<T>(mark, key);
+}
+
+class DereferenceScalarError : public RepresentationException {
+ public:
+  DereferenceScalarError()
+      : RepresentationException(Mark::null_mark(),
+                                ErrorMsg::DEREFERENCE_SCALAR) {}
+};
+
+class DereferenceKeyScalarError : public RepresentationException {
+ public:
+  DereferenceKeyScalarError()
+      : RepresentationException(Mark::null_mark(),
+                                ErrorMsg::DEREFERENCE_KEY_SCALAR) {}
+};
+
+class DereferenceValueScalarError : public RepresentationException {
+ public:
+  DereferenceValueScalarError()
+      : RepresentationException(Mark::null_mark(),
+                                ErrorMsg::DEREFERENCE_VALUE_SCALAR) {}
+};
+
+class DereferenceKeySeqError : public RepresentationException {
+ public:
+  DereferenceKeySeqError()
+      : RepresentationException(Mark::null_mark(),
+                                ErrorMsg::DEREFERENCE_KEY_SEQ) {}
+};
+
+class DereferenceValueSeqError : public RepresentationException {
+ public:
+  DereferenceValueSeqError()
+      : RepresentationException(Mark::null_mark(),
+                                ErrorMsg::DEREFERENCE_VALUE_SEQ) {}
+};
+
+class DereferenceMapError : public RepresentationException {
+ public:
+  DereferenceMapError()
+      : RepresentationException(Mark::null_mark(), ErrorMsg::DEREFERENCE_MAP) {}
 };
 
 class EmitterException : public Exception {

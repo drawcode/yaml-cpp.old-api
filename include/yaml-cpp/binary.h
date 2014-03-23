@@ -11,22 +11,24 @@
 #include <vector>
 
 namespace YAML {
-std::string EncodeBase64(const unsigned char *data, std::size_t size);
-std::vector<unsigned char> DecodeBase64(const std::string &input);
+class Node;
+
+std::string EncodeBase64(const unsigned char* data, std::size_t size);
+std::vector<unsigned char> DecodeBase64(const std::string& input);
 
 class Binary {
  public:
   Binary() : m_unownedData(0), m_unownedSize(0) {}
-  Binary(const unsigned char *data_, std::size_t size_)
+  Binary(const unsigned char* data_, std::size_t size_)
       : m_unownedData(data_), m_unownedSize(size_) {}
 
   bool owned() const { return !m_unownedData; }
   std::size_t size() const { return owned() ? m_data.size() : m_unownedSize; }
-  const unsigned char *data() const {
+  const unsigned char* data() const {
     return owned() ? &m_data[0] : m_unownedData;
   }
 
-  void swap(std::vector<unsigned char> &rhs) {
+  void swap(std::vector<unsigned char>& rhs) {
     if (m_unownedData) {
       m_data.swap(rhs);
       rhs.clear();
@@ -39,12 +41,12 @@ class Binary {
     }
   }
 
-  bool operator==(const Binary &rhs) const {
+  bool operator==(const Binary& rhs) const {
     const std::size_t s = size();
     if (s != rhs.size())
       return false;
-    const unsigned char *d1 = data();
-    const unsigned char *d2 = rhs.data();
+    const unsigned char* d1 = data();
+    const unsigned char* d2 = rhs.data();
     for (std::size_t i = 0; i < s; i++) {
       if (*d1++ != *d2++)
         return false;
@@ -52,13 +54,15 @@ class Binary {
     return true;
   }
 
-  bool operator!=(const Binary &rhs) const { return !(*this == rhs); }
+  bool operator!=(const Binary& rhs) const { return !(*this == rhs); }
 
  private:
   std::vector<unsigned char> m_data;
-  const unsigned char *m_unownedData;
+  const unsigned char* m_unownedData;
   std::size_t m_unownedSize;
 };
+
+void operator>>(const Node& node, Binary& binary);
 }
 
 #endif  // BASE64_H_62B23520_7C8E_11DE_8A39_0800200C9A66

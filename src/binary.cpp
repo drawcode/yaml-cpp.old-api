@@ -1,15 +1,17 @@
 #include "yaml-cpp/binary.h"
 
+#include "yaml-cpp/node.h"
+
 namespace YAML {
 static const char encoding[] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-std::string EncodeBase64(const unsigned char *data, std::size_t size) {
+std::string EncodeBase64(const unsigned char* data, std::size_t size) {
   const char PAD = '=';
 
   std::string ret;
   ret.resize(4 * size / 3 + 3);
-  char *out = &ret[0];
+  char* out = &ret[0];
 
   std::size_t chunks = size / 3;
   std::size_t remainder = size % 3;
@@ -62,13 +64,13 @@ static const unsigned char decoding[] = {
     255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
     255, };
 
-std::vector<unsigned char> DecodeBase64(const std::string &input) {
+std::vector<unsigned char> DecodeBase64(const std::string& input) {
   typedef std::vector<unsigned char> ret_type;
   if (input.empty())
     return ret_type();
 
   ret_type ret(3 * input.size() / 4 + 1);
-  unsigned char *out = &ret[0];
+  unsigned char* out = &ret[0];
 
   unsigned value = 0;
   for (std::size_t i = 0; i < input.size(); i++) {
@@ -88,5 +90,12 @@ std::vector<unsigned char> DecodeBase64(const std::string &input) {
 
   ret.resize(out - &ret[0]);
   return ret;
+}
+
+void operator>>(const Node& node, Binary& binary) {
+  std::string scalar;
+  node.GetScalar(scalar);
+  std::vector<unsigned char> data = DecodeBase64(scalar);
+  binary.swap(data);
 }
 }

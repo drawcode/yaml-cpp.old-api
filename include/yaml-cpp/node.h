@@ -23,7 +23,8 @@
 #include "yaml-cpp/traits.h"
 
 namespace YAML {
-template <typename T> struct is_scalar_convertible;
+template <typename T>
+struct is_scalar_convertible;
 }  // namespace YAML
 
 namespace YAML {
@@ -35,12 +36,7 @@ class NodeOwnership;
 class Scanner;
 
 struct NodeType {
-  enum value {
-    Null,
-    Scalar,
-    Sequence,
-    Map
-  };
+  enum value { Null, Scalar, Sequence, Map };
 };
 
 class YAML_CPP_API Node : private noncopyable {

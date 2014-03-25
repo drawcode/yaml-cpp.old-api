@@ -24,11 +24,7 @@ struct IterPriv {
   IterPriv(std::map<Node *, Node *, ltnode>::const_iterator it)
       : type(IT_MAP), mapIter(it) {}
 
-  enum ITER_TYPE {
-    IT_NONE,
-    IT_SEQ,
-    IT_MAP
-  };
+  enum ITER_TYPE { IT_NONE, IT_SEQ, IT_MAP };
   ITER_TYPE type;
 
   std::vector<Node *>::const_iterator seqIter;

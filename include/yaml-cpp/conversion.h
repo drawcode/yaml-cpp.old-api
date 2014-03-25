@@ -24,28 +24,20 @@ namespace YAML {
 
 template <typename T>
 struct is_scalar_convertible {
-  enum {
-    value = is_numeric<T>::value
-  };
+  enum { value = is_numeric<T>::value };
 };
 
 template <>
 struct is_scalar_convertible<std::string> {
-  enum {
-    value = true
-  };
+  enum { value = true };
 };
 template <>
 struct is_scalar_convertible<bool> {
-  enum {
-    value = true
-  };
+  enum { value = true };
 };
 template <>
 struct is_scalar_convertible<_Null> {
-  enum {
-    value = true
-  };
+  enum { value = true };
 };
 
 // actual conversion

@@ -2,14 +2,16 @@
 #include <sstream>
 
 #include "directives.h"  // IWYU pragma: keep
-#include "scanner.h"     // IWYU pragma: keep
+#include "nodebuilder.h"
+#include "scanner.h"  // IWYU pragma: keep
 #include "singledocparser.h"
 #include "token.h"
-#include "yaml-cpp/exceptions.h"  // IWYU pragma: keep
+#include "yaml-cpp/exceptions.h"
 #include "yaml-cpp/parser.h"
 
 namespace YAML {
 class EventHandler;
+class Node;
 
 Parser::Parser() {}
 
@@ -41,6 +43,14 @@ bool Parser::HandleNextDocument(EventHandler& eventHandler) {
   SingleDocParser sdp(*m_pScanner, *m_pDirectives);
   sdp.HandleDocument(eventHandler);
   return true;
+}
+
+// GetNextDocument
+// . Reads the next document in the queue (of tokens).
+// . Throws a ParserException on error.
+bool Parser::GetNextDocument(Node& document) {
+  NodeBuilder builder(document);
+  return HandleNextDocument(builder);
 }
 
 // ParseDirectives

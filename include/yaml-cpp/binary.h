@@ -15,8 +15,9 @@
 namespace YAML {
 class Node;
 
-std::string EncodeBase64(const unsigned char* data, std::size_t size);
-std::vector<unsigned char> DecodeBase64(const std::string& input);
+YAML_CPP_API std::string EncodeBase64(const unsigned char* data,
+                                      std::size_t size);
+YAML_CPP_API std::vector<unsigned char> DecodeBase64(const std::string& input);
 
 class YAML_CPP_API Binary {
  public:

@@ -72,16 +72,13 @@ void Node::EmitEvents(AliasManager& am, EventHandler& eventHandler) const {
       eventHandler.OnScalar(m_mark, m_tag, anchor, m_scalarData);
       break;
     case NodeType::Sequence:
-      // TODO: use the node's style.
-      eventHandler.OnSequenceStart(m_mark, m_tag, anchor,
-                                   EmitterStyle::Default);
+      eventHandler.OnSequenceStart(m_mark, m_tag, anchor, m_style);
       for (std::size_t i = 0; i < m_seqData.size(); i++)
         m_seqData[i]->EmitEvents(am, eventHandler);
       eventHandler.OnSequenceEnd();
       break;
     case NodeType::Map:
-      // TODO: use the node's style.
-      eventHandler.OnMapStart(m_mark, m_tag, anchor, EmitterStyle::Default);
+      eventHandler.OnMapStart(m_mark, m_tag, anchor, m_style);
       for (node_map::const_iterator it = m_mapData.begin();
            it != m_mapData.end(); ++it) {
         it->first->EmitEvents(am, eventHandler);
@@ -92,12 +89,13 @@ void Node::EmitEvents(AliasManager& am, EventHandler& eventHandler) const {
   }
 }
 
-void Node::Init(NodeType::value type, const Mark& mark,
-                const std::string& tag) {
+void Node::Init(NodeType::value type, const Mark& mark, const std::string& tag,
+                EmitterStyle::value style) {
   Clear();
   m_mark = mark;
   m_type = type;
   m_tag = tag;
+  m_style = style;
 }
 
 void Node::MarkAsAliased() { m_pOwnership->MarkAsAliased(*this); }

@@ -15,6 +15,7 @@
 
 #include "yaml-cpp/conversion.h"
 #include "yaml-cpp/dll.h"
+#include "yaml-cpp/emitterstyle.h"
 #include "yaml-cpp/exceptions.h"
 #include "yaml-cpp/iterator.h"
 #include "yaml-cpp/ltnode.h"
@@ -104,7 +105,8 @@ class YAML_CPP_API Node : private noncopyable {
   explicit Node(NodeOwnership& owner);
   Node& CreateNode();
 
-  void Init(NodeType::value type, const Mark& mark, const std::string& tag);
+  void Init(NodeType::value type, const Mark& mark, const std::string& tag,
+            EmitterStyle::value style);
 
   void MarkAsAliased();
   void SetScalarData(const std::string& data);
@@ -128,6 +130,7 @@ class YAML_CPP_API Node : private noncopyable {
 
   Mark m_mark;
   std::string m_tag;
+  EmitterStyle::value m_style;
 
   typedef std::vector<Node*> node_seq;
   typedef std::map<Node*, Node*, ltnode> node_map;

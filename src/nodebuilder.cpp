@@ -20,7 +20,7 @@ void NodeBuilder::OnDocumentEnd() { assert(m_finished); }
 
 void NodeBuilder::OnNull(const Mark& mark, anchor_t anchor) {
   Node& node = Push(anchor);
-  node.Init(NodeType::Null, mark, "");
+  node.Init(NodeType::Null, mark, "", EmitterStyle::Default);
   Pop();
 }
 
@@ -33,25 +33,23 @@ void NodeBuilder::OnAlias(const Mark& /*mark*/, anchor_t anchor) {
 void NodeBuilder::OnScalar(const Mark& mark, const std::string& tag,
                            anchor_t anchor, const std::string& value) {
   Node& node = Push(anchor);
-  node.Init(NodeType::Scalar, mark, tag);
+  node.Init(NodeType::Scalar, mark, tag, EmitterStyle::Default);
   node.SetScalarData(value);
   Pop();
 }
 
 void NodeBuilder::OnSequenceStart(const Mark& mark, const std::string& tag,
                                   anchor_t anchor, EmitterStyle::value style) {
-  // TODO: set the style on the node.
   Node& node = Push(anchor);
-  node.Init(NodeType::Sequence, mark, tag);
+  node.Init(NodeType::Sequence, mark, tag, style);
 }
 
 void NodeBuilder::OnSequenceEnd() { Pop(); }
 
 void NodeBuilder::OnMapStart(const Mark& mark, const std::string& tag,
                              anchor_t anchor, EmitterStyle::value style) {
-  // TODO: set the style on the node.
   Node& node = Push(anchor);
-  node.Init(NodeType::Map, mark, tag);
+  node.Init(NodeType::Map, mark, tag, style);
   m_didPushKey.push(false);
 }
 

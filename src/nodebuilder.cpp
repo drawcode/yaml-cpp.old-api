@@ -39,7 +39,8 @@ void NodeBuilder::OnScalar(const Mark& mark, const std::string& tag,
 }
 
 void NodeBuilder::OnSequenceStart(const Mark& mark, const std::string& tag,
-                                  anchor_t anchor) {
+                                  anchor_t anchor, EmitterStyle::value style) {
+  // TODO: set the style on the node.
   Node& node = Push(anchor);
   node.Init(NodeType::Sequence, mark, tag);
 }
@@ -47,7 +48,8 @@ void NodeBuilder::OnSequenceStart(const Mark& mark, const std::string& tag,
 void NodeBuilder::OnSequenceEnd() { Pop(); }
 
 void NodeBuilder::OnMapStart(const Mark& mark, const std::string& tag,
-                             anchor_t anchor) {
+                             anchor_t anchor, EmitterStyle::value style) {
+  // TODO: set the style on the node.
   Node& node = Push(anchor);
   node.Init(NodeType::Map, mark, tag);
   m_didPushKey.push(false);

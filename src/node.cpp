@@ -72,13 +72,16 @@ void Node::EmitEvents(AliasManager& am, EventHandler& eventHandler) const {
       eventHandler.OnScalar(m_mark, m_tag, anchor, m_scalarData);
       break;
     case NodeType::Sequence:
-      eventHandler.OnSequenceStart(m_mark, m_tag, anchor);
+      // TODO: use the node's style.
+      eventHandler.OnSequenceStart(m_mark, m_tag, anchor,
+                                   EmitterStyle::Default);
       for (std::size_t i = 0; i < m_seqData.size(); i++)
         m_seqData[i]->EmitEvents(am, eventHandler);
       eventHandler.OnSequenceEnd();
       break;
     case NodeType::Map:
-      eventHandler.OnMapStart(m_mark, m_tag, anchor);
+      // TODO: use the node's style.
+      eventHandler.OnMapStart(m_mark, m_tag, anchor, EmitterStyle::Default);
       for (node_map::const_iterator it = m_mapData.begin();
            it != m_mapData.end(); ++it) {
         it->first->EmitEvents(am, eventHandler);
